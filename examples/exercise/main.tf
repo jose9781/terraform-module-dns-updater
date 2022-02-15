@@ -12,5 +12,6 @@ module "dns_updater" {
 # Write your Terraform module inputs here
 # ----------------------------------------
 
+  source_files_path = "input-json/"
 
 }
