@@ -16,7 +16,8 @@ included as an input that contain all the necessary attributes to create DNS rec
 ```hcl
 module "dns_updater" {
   source = "./dns-updater"
-  input1 = source_files_path
+
+  source_files_path = "input-json/"
 }
 ```
 

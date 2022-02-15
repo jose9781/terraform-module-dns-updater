@@ -13,7 +13,8 @@
 * ```hcl
 * module "dns_updater" {
 *   source = "./dns-updater"
-*   input1 = source_files_path
+*
+*   source_files_path = "input-json/"
 * } 
 * ```
 *
@@ -49,7 +50,7 @@ terraform {
 locals {
 
   valid_extension = ".json"
-#  source_files_path = "${path.module}/examples/exercise/input-json/"
+  ## source_files_path = "${path.module}/examples/exercise/input-json/"
   source_files_path = var.source_files_path  
 
   ## Discarding everything but JSON files
