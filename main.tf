@@ -5,6 +5,7 @@
 * the official [DNS Terraform provider](https://registry.terraform.io/providers/hashicorp/dns/latest).
 * In order to create DNS records dynamically,the module reads an arbitrary number of JSON files from a local directory
 * included as an input that contain all the necessary attributes to create DNS records 
+* It now supports the creation of A records and CNAME records
 *
 * ## Usage
 *
@@ -59,8 +60,11 @@ locals {
   ## Filling up a list of the domain_names from the file names but trimming the extension
   domain_names = [for file in local.valid_files : trimsuffix(file, "${local.valid_extension}")]
 
-  ## Creating an object containing the name of every domain and a map with their attributes
-  a_records = {for file in local.domain_names : file => jsondecode(file("${local.source_files_path}/${file}.json"))}
+  ## Creating an object for a_records containing the name of every domain and a map with their attributes
+  a_records = {for file in local.domain_names : file => jsondecode(file("${local.source_files_path}/${file}.json")) if jsondecode(file("${local.source_files_path}/${file}.json")).dns_record_type == "a" }
+
+  ## Creating an object for cname_records containing the name of every domain and a map with their attributes
+  cname_records = {for file in local.domain_names : file => jsondecode(file("${local.source_files_path}/${file}.json")) if jsondecode(file("${local.source_files_path}/${file}.json")).dns_record_type == "CNAME" }
 
 }
 
@@ -69,7 +73,7 @@ locals {
 # ------------------------------------------
 
 
-resource "dns_a_record_set" "record"  {
+resource "dns_a_record_set" "a_record"  {
 
  ### It will iterate over all the a_records gathered in the local.a_records
  for_each = local.a_records
@@ -80,5 +84,19 @@ resource "dns_a_record_set" "record"  {
  ttl = each.value.ttl
 
 }
+
+
+
+resource "dns_cname_record" "cname_record" {
+
+  ### It will iterate over all the cname_records gathered in the local.cname_records
+  for_each = local.cname_records
+  
+  zone  = each.value.zone
+  name  = each.key
+  cname = each.value.cname
+  ttl   = each.value.ttl
+}
+
 
 

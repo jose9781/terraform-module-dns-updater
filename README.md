@@ -8,6 +8,7 @@ This module is capable of creating an arbitrary set of DNS entries against a DNS
 the official [DNS Terraform provider](https://registry.terraform.io/providers/hashicorp/dns/latest).
 In order to create DNS records dynamically,the module reads an arbitrary number of JSON files from a local directory
 included as an input that contain all the necessary attributes to create DNS records
+It now supports the creation of A records and CNAME records
 
 ## Usage
 
@@ -42,7 +43,8 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [dns_a_record_set.record](https://registry.terraform.io/providers/hashicorp/dns/latest/docs/resources/a_record_set) | resource |
+| [dns_a_record_set.a_record](https://registry.terraform.io/providers/hashicorp/dns/latest/docs/resources/a_record_set) | resource |
+| [dns_cname_record.cname_record](https://registry.terraform.io/providers/hashicorp/dns/latest/docs/resources/cname_record) | resource |
 
 ## Inputs
 
